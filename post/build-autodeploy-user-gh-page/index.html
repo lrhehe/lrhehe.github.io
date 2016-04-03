@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+  <base href="http://blog.lrhehe.com/">
+  <script>
+    document._writeOriginal = document.write;
+    document.write = function(str) {
+        if (str.indexOf('livereload.js') > -1) {
+            document._writeOriginal(str);
+        } else {
+            document._writeOriginal('<!-- Be Hijack!! -->');
+        }
+    }
+  </script>
+  <title>使用GitHub Pages和Wercker搭建自动部署的个人博客 - lrhehe&#39;s blog</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<meta name="description" content="介绍了用markdown写博客，用git进行版本控制，用[Hugo](https://gohugo.io/)生成网站，用[Wercker](http://wercker.com/)自动化部署到 GitHubPage的方案">
+<meta name="author" content="lrhehe">
+<meta name="publisher" content="lrhehe">
+<meta name="generator" content="http://gohugo.io/"/>
+
+<meta itemprop="name" content="使用GitHub Pages和Wercker搭建自动部署的个人博客 - lrhehe&#39;s blog">
+<meta itemprop="description" content="介绍了用markdown写博客，用git进行版本控制，用[Hugo](https://gohugo.io/)生成网站，用[Wercker](http://wercker.com/)自动化部署到 GitHubPage的方案">
+<meta itemprop="image" content="http://blog.lrhehe.com/public/author.jpg">
+
+<meta property="og:title" content="使用GitHub Pages和Wercker搭建自动部署的个人博客 - lrhehe&#39;s blog" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.lrhehe.com/post/build-autodeploy-user-gh-page/" />
+<meta property="og:image" content="http://blog.lrhehe.com/public/author.jpg" />
+<meta property="og:description" content="介绍了用markdown写博客，用git进行版本控制，用[Hugo](https://gohugo.io/)生成网站，用[Wercker](http://wercker.com/)自动化部署到 GitHubPage的方案">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="lrhehe">
+<meta name="twitter:title" content="使用GitHub Pages和Wercker搭建自动部署的个人博客 - lrhehe&#39;s blog">
+<meta name="twitter:description" content="介绍了用markdown写博客，用git进行版本控制，用[Hugo](https://gohugo.io/)生成网站，用[Wercker](http://wercker.com/)自动化部署到 GitHubPage的方案">
+<meta name="twitter:creator" content="@coderzh">
+<meta name="twitter:image" content="http://blog.lrhehe.com/public/author.jpg">
+
+  <script>document.documentElement.className = document.documentElement.className.replace("no-js", "js");</script>
+  <link rel="canonical" href="http://blog.lrhehe.com/post/build-autodeploy-user-gh-page/">
+  <link rel='shortlink' href="http://blog.lrhehe.com/post/build-autodeploy-user-gh-page/"/>
+  <link rel="shortcut icon" href="http://blog.lrhehe.com/public/favicon.ico"/>
+  
+<link rel="stylesheet" id="human-style-css" href="http://blog.lrhehe.com/wp-content/themes/hueman/style.css" type="text/css" media="all"/>
+<link rel="stylesheet" id="human-style-css2" href="http://blog.lrhehe.com/wp-content/themes/hueman-child/style.css" type="text/css" media="all"/>
+<link rel="stylesheet" id="responsive-css" href="http://blog.lrhehe.com/wp-content/themes/hueman/responsive.css" type="text/css" media="all"/>
+<link rel="stylesheet" id="font-awesome-css" href="http://blog.lrhehe.com/wp-content/themes/hueman/fonts/font-awesome.min.css" type="text/css" media="all"/>
+<link rel="stylesheet" href="http://blog.lrhehe.com/public/highlight/styles/github.css">
+<script src="http://blog.lrhehe.com/public/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<link rel="stylesheet" id="human-style-css3" href="http://blog.lrhehe.com/wp-content/themes/hueman-child/user.css" type="text/css" media="all"/>
+<link rel="stylesheet" href="public/font/hack/css/hack.min.css">
+
+<script type="text/javascript" src="assets/js/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="wp-content/themes/hueman/js/jquery.jplayer.min.js"></script>
+<script type="text/javascript" src="wp-content/themes/hueman/js/scripts.js"></script>
+<script type="text/javascript" src="assets/picturefill/picturefill.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery.matchHeight-min.js"></script>
+<script type="text/javascript" async defer src="assets/js/myblog.js"></script>
+
+</head>
+
+<body class="single single-post single-format-standard col-2cl full-width topbar-enabled chrome">
+<div id="wrapper">
+  <header id="header">
+
+  <nav class="nav-container group" id="nav-topbar">
+    <div class="nav-toggle"><i class="fa fa-bars"></i></div>
+    <div class="nav-text"></div>
+    <div class="nav-wrap container">
+      <a rel="nofollow" href="http://blog.lrhehe.com/" class="nav-cs-icon">
+        <img width="40" height="40" src="http://blog.lrhehe.com/public/author.jpg" alt="" title="Home">
+      </a>
+      <ul id="menu-default-menu" class="nav container-inner group">
+        <li class="menu-item menu-item-type-post_type menu-item-object-page">
+          <a rel="nofollow" href="http://blog.lrhehe.com/">首页</a>
+        </li>
+        
+        <li class="menu-item menu-item-type-post_type menu-item-object-page">
+          <a rel="nofollow" href="http://blog.lrhehe.com/post/">归档</a>
+        </li>
+        
+        <li class="menu-item menu-item-type-post_type menu-item-object-page">
+          <a rel="nofollow" href="http://blog.lrhehe.com/about/">关于我</a>
+        </li>
+        
+        <li class="menu-item menu-item-type-post_type menu-item-object-page">
+          <a rel="nofollow" href="http://blog.lrhehe.com/feed.xml" type="application/rss+xml" target="_blank">订阅</a>
+        </li>
+        <li class="menu-item menu-item-type-post_type menu-item-text">
+        
+        </li>
+      </ul>
+    </div>
+
+    <div class="container">
+      <div class="container-inner">
+        <div class="toggle-search"><i class="fa fa-search"></i></div>
+        <div class="search-expand">
+          <div class="search-expand-inner">
+            <form method="get" class="searchform themeform" action="https://www.google.com/search">
+              <div>
+                <input type="text" class="search" name="q" placeholder="Press enter to start searching">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+
+  </nav>
+  
+
+  <div class="container group">
+    <div class="container-inner">
+
+      <div class="group pad">
+        <div class="group pad">
+          <h1 class="site-title" style="color:rgb(255,255,255)">
+             lrhehe&#39;s blog
+          </h1>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+
+</header>
+
+
+
+  <div class="container" id="page">
+    <div class="container-inner">
+      <div class="main">
+        <div class="main-inner group">
+          <section class="content">
+            <div class="page-title pad group">
+              <ul class="meta-single group">
+                
+                <li class="category">
+                  <a href="http://blog.lrhehe.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/" rel="category tag">技术文章</a>
+                </li>
+                
+              </ul>
+            </div>
+
+            <div class="pad group">
+
+              <article
+                  class="post type-post status-publish format-standard has-post-thumbnail hentry category-australien tag-bondi-beach tag-city2surf tag-sydney">
+                <div class="post-inner group">
+
+                  <h1 class="post-title">使用GitHub Pages和Wercker搭建自动部署的个人博客</h1>
+
+                  <p class="post-byline">
+                    by  · 2016-01-27 · 616 Words ·
+                    ~2min reading time 
+                  </p>
+
+                  <div class="clear"></div>
+
+                  <div class="entry">
+                    <div class="entry-inner">
+                      
+                      
+
+<h3 id="what:04f2d6a4e2142a2a79db56be6c61559b">What</h3>
+
+<p>​   用markdown写博客，用git进行版本控制，用<a href="https://gohugo.io/">Hugo</a>生成网站，用<a href="http://wercker.com/">Wercker</a>自动化部署到 GitHubPage</p>
+
+
+<figure >
+    
+        <img src="http://blog.lrhehe.com/img/my-gh-page-flow.png" />
+    
+    
+    <figcaption>
+        <h4>My GithubPages</h4>
+        
+    </figcaption>
+    
+</figure>
+
+
+<h3 id="why:04f2d6a4e2142a2a79db56be6c61559b">Why</h3>
+
+<p>​   一直都想好好维护自己的个人博客，曾尝试用自建的WordPress写过几篇文章，后无疾而终。原因种种，种种原因，就不写在这里了。然而理想依然在，折腾无止境。</p>
+
+<p>​   想了一下，我对这一次搭建的个人博客有下面一些要求：</p>
+
+<ul>
+<li><p>使用git管理</p></li>
+
+<li><p>使用markdown编辑</p></li>
+
+<li><p>越简单越好</p></li>
+</ul>
+
+<p>​   前两个要求是因为不想学习新软件的使用，而是花时间在一些能一直用的技术上。最后一个要求是因为懒，不想维护服务器，不想做各种配置，这些复杂的东西实在太容易忘记了。</p>
+
+<h3 id="how:04f2d6a4e2142a2a79db56be6c61559b">How</h3>
+
+<p>​   作为一个软件开发人员，最熟的就是代码仓库了，如果维护个人博客就像维护一个代码仓库一样就好了。写上一篇博客，commit，push，然后大功告成！想想就开心啊。</p>
+
+<p>​   为了不维护服务器，选用了Github Pages，感谢非常有良心的github；使用<a href="https://gohugo.io/">Hugo</a>（对golang感兴趣，所以选了这个）来作为website engine，负责将文件构建成网站；使用<a href="http://wercker.com/">Wercker</a>来做自动化部署，每次push新的commit都会重新编译和部署网站。</p>
+
+<p>​   具体实现主要参考了Hugo的文档</p>
+
+<ol>
+<li><p>本地新建Hugo Project，push到Github，这是代码仓库</p></li>
+
+<li><p>在Github上新建 [your username].github.io，这是博客仓库</p></li>
+
+<li><p>连接代码仓库到Wercker，配置自动部署，将代码仓库的public文件夹内容push到博客仓库即可</p></li>
+</ol>
+
+<p>​</p>
+
+<p>可以参考：</p>
+
+<p><a href="https://gohugo.io/tutorials/github-pages-blog/">Hosting on GithubPages</a></p>
+
+<p><a href="https://gohugo.io/tutorials/automated-deployments/">Automated deployments with Wercker</a></p>
+
+<p><a href="https://github.com/lrhehe/my-hugo-github-pages">my-hugo-github-pages</a></p>
+
+<p><a href="https://github.com/lrhehe/lrhehe.github.io">lrhehe.github.io</a></p>
+
+<h3 id="conclude:04f2d6a4e2142a2a79db56be6c61559b">Conclude</h3>
+
+<ul>
+<li>清楚需求很重要，根据需求来选合适的实现方案</li>
+<li>连接的红利，Wrecker 和 Github 相连，让世界变简单</li>
+</ul>
+
+                      
+                    </div>
+                    <div class="clear"></div>
+                  </div>
+                  
+
+                </div>
+                
+              </article>
+              
+              <div class="clear"></div>
+              
+              
+              
+            </div>
+          </section>
+          <div class="sidebar s1">
+  <a class="sidebar-toggle" title="Expand Sidebar"><i class="fa icon-sidebar-toggle"></i></a>
+  <div class="sidebar-content">
+    <div class="sidebar-top group">
+      <p>More</p>
+    </div>
+  
+
+<div class="widget widget_categories">
+  <h3>Categories</h3>
+  <ul>
+    
+    <li><a ref="http://blog.lrhehe.comcategories/%e6%8a%80%e6%9c%af%e6%96%87%e7%ab%a0" title="技术文章">技术文章 (2)</a></li>
+    
+  </ul>
+</div>
+
+
+
+  
+
+<div class="widget post-tags a">
+	<h3>Tags</h3>
+		<ul class="clearfix">
+      
+			<li><a href="http://blog.lrhehe.comtags/android%e5%bc%80%e5%8f%91" title="android开发">android开发 (1)</a></li>
+      
+			<li><a href="http://blog.lrhehe.comtags/%e5%8d%9a%e5%ae%a2%e6%90%ad%e5%bb%ba" title="博客搭建">博客搭建 (1)</a></li>
+      
+			<li><a href="http://blog.lrhehe.comtags/%e6%8f%92%e4%bb%b6%e5%8c%96%e5%bc%80%e5%8f%91" title="插件化开发">插件化开发 (1)</a></li>
+      
+		</ul>
+</div>
+
+
+
+
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer id="footer">
+  <section class="container" id="footer-bottom">
+    <div class="container-inner">
+      <a id="back-to-top" href="#"><i class="fa fa-angle-up"></i></a>
+      <div class="pad group">
+        <div class="grid one-half">
+          <div id="copyright">
+            <p>Copyright © 2016. All Rights Reserved. <br>Powered by
+              <a rel="nofollow" href="http://gohugo.io/" target="_blank">Hugo - the static site generator</a>.
+              <a rel="nofollow" href="http://golang.org" target="_blank">#golang</a>.
+            </p>
+          </div>
+          
+        </div>
+        
+        <div class="grid one-half last">
+          <ul class="social-links">
+
+    <li>
+    <a class="social-tooltip" title="On Twitter" rel="nofollow"
+        href="https://twitter.com/lrhehe" target="_blank">
+        <i class="fa fa-twitter"></i>
+    </a>
+    </li>
+    <li>
+    <a class="social-tooltip" title="On GitHub"
+        href="https://github.com/lrhehe" target="_blank">
+        <i class="fa fa-github"></i>
+    </a>
+    </li>
+</ul>
+
+        </div>
+      </div>
+
+    </div>
+    
+  </section>
+  
+</footer>
+
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-10147768-2', 'auto');
+  ga('send', 'pageview');
+
+  $('#messagesbsb').remove();
+
+</script>
+</body>
+</html>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://blog.lrhehe.com/</loc>
+    <lastmod>2016-04-02T12:24:04+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.lrhehe.com/post/Andriod%20%E6%8F%92%E4%BB%B6%E5%8C%96%E5%BC%80%E5%8F%91/</loc>
+    <lastmod>2016-04-02T12:24:04+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.lrhehe.com/post/build-autodeploy-user-gh-page/</loc>
+    <lastmod>2016-01-27T00:00:00+00:00</lastmod>
+  </url>
+  
+</urlset>
